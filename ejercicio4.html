@@ -1,0 +1,48 @@
+<html>
+<head>
+<title>Ejemplo con Ajax para sacar Fichero de Texto </title>
+<script type = "text/javascript">
+var XMLHttpRequestObject = false;
+if (window.XMLHttpRequest) {
+XMLHttpRequestObject = new XMLHttpRequest();
+} else if (window.ActiveXObject) {
+XMLHttpRequestObject = new ActiveXObject("Microsoft.XMLHTTP");
+}
+function sacardatos(datos, idDiv){
+    if(XMLHttpRequestObject) {
+        var objeto = document.getElementById(idDiv);
+        XMLHttpRequestObject.open("GET", datos);
+        XMLHttpRequestObject.onreadystatechange = function(){
+        if (XMLHttpRequestObject.readyState == 4 &&
+        XMLHttpRequestObject.status == 200) {
+            var xml = XMLHttpRequestObject.responseXML;
+            var agendas = xml.getElementsByTagName('agenda')
+            //for (let i = 0; i < agendas.length; i++) {
+                var agenda = agendas[0]
+                var nombre = agenda.getElementsByTagName('nombre')[0].firstChild.nodeValue
+                var apellidos = agenda.getElementsByTagName('apellidos')[0].firstChild.nodeValue
+                var telf = agenda.getElementsByTagName('telf')[0].firstChild.nodeValue
+                var email = agenda.getElementsByTagName('email')[0].firstChild.nodeValue
+
+                resultado = "<p>"+ nombre + " "+ apellidos + " "+ telf + " "+ email +"</p>"    
+            
+            contenedor.innerHTML = resultado;
+        }
+    }
+    XMLHttpRequestObject.send(null);
+    }
+}
+</script>
+</head>
+<body>
+    <H1>Mostrar Fichero de Texto en Ajax</H1>
+    <form>
+        Página 3 de 8
+        <input type = "button" value = "Mostrar Fichero" onclick =
+        "sacardatos('fichero.xml','contenedor')"> 
+    </form>
+    <div id="contenedor" style="background-color:#99FF66;">
+        <p> Mostrar&aacute; contenido del fichero </p>
+    </div>
+</body>
+</html>
